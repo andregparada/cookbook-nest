@@ -3,7 +3,9 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
 export interface ChefProps {
-  name: string
+  firstName: string
+  lastName: string
+  userName: string
   email: string
   hashedPassword: string
   profilePictureUrl?: string | null
@@ -13,8 +15,16 @@ export interface ChefProps {
 }
 
 export class Chef extends Entity<ChefProps> {
-  get name() {
-    return this.props.name
+  get firstName() {
+    return this.props.firstName
+  }
+
+  get lastName() {
+    return this.props.lastName
+  }
+
+  get userName() {
+    return this.props.userName
   }
 
   get email() {

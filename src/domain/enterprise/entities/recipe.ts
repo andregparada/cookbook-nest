@@ -8,11 +8,12 @@ export interface RecipeProps {
   slug: Slug
   description: string
   instructions: string
-  prepTimeInMinutes: number
-  cookTimeInMinutes: number
-  servings: number
+  prepTimeInMinutes?: number
+  cookTimeInMinutes?: number
+  servings?: number
   difficultyLevel: 'easy' | 'medium' | 'hard'
   authorId: UniqueEntityID
+  tags: UniqueEntityID[]
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -48,6 +49,10 @@ export class Recipe extends Entity<RecipeProps> {
 
   get authorId() {
     return this.props.authorId
+  }
+
+  get tags() {
+    return this.props.tags
   }
 
   get createdAt() {
