@@ -4,7 +4,6 @@ import { Optional } from '@/core/types/optional'
 
 export interface IngredientProps {
   name: string
-  cost: number
   createdAt: Date
   updatedAt?: Date | null
 }
