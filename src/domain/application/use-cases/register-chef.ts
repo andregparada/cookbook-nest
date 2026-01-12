@@ -1,6 +1,11 @@
 import { Chef } from '../../enterprise/entities/chef'
 import { Either, left, right } from '@/core/either'
 import { ChefAlreadyExistsError } from './errors/chef-already-exists-error'
+import { ChefsRepository } from '../repositories/chefs-repository'
+import { HashGenerator } from '../cryptography/hash-generator'
+import { ChefAttachment } from '@/domain/enterprise/entities/chef-attachment'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ChefAttachmentsList } from '@/domain/enterprise/entities/chef-attachments-list'
 
 interface RegisterChefUseCaseRequest {
   firstName: string
@@ -26,9 +31,13 @@ export class RegisterChefUseCase {
   ) {}
 
   async execute({
-    name,
+    firstName,
+    lastName,
+    userName,
     email,
     password,
+    bio,
+    attachmentsIds,
   }: RegisterChefUseCaseRequest): Promise<RegisterChefUseCaseResponse> {
     const chefWithSameEmail = await this.chefsRepository.findByEmail(email)
 
@@ -39,10 +48,22 @@ export class RegisterChefUseCase {
     const hashedPassword = await this.hashGenerator.hash(password)
 
     const chef = Chef.create({
-      name,
+      firstName,
+      lastName,
+      userName,
       email,
-      password: hashedPassword,
+      hashedPassword,
+      bio,
     })
+
+    const chefAttachments = attachmentsIds?.map((attacnehmentId) => {
+      return ChefAttachment.create({
+        attachmentId: new UniqueEntityID(attacnehmentId),
+        chefId: chef.id,
+      })
+    })
+
+    chef.attachments = new ChefAttachmentsList(chefAttachments ?? [])
 
     await this.chefsRepository.create(chef)
 

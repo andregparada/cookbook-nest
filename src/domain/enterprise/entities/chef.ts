@@ -40,6 +40,11 @@ export class Chef extends Entity<ChefProps> {
     return this.props.attachments
   }
 
+  set attachments(attachments: ChefAttachmentsList) {
+    this.props.attachments = attachments
+    this.touch()
+  }
+
   get bio() {
     return this.props.bio
   }
