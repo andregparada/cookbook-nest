@@ -1,5 +1,6 @@
 import { Chef } from '../../enterprise/entities/chef'
 import { Either, left, right } from '@/core/either'
+import { ChefAlreadyExistsError } from './errors/chef-already-exists-error'
 
 interface RegisterChefUseCaseRequest {
   firstName: string
@@ -7,10 +8,12 @@ interface RegisterChefUseCaseRequest {
   userName: string
   email: string
   password: string
+  bio?: string
+  attachmentsIds?: string[]
 }
 
 type RegisterChefUseCaseResponse = Either<
-  ,
+  ChefAlreadyExistsError,
   {
     chef: Chef
   }
