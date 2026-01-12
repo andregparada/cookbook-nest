@@ -1,6 +1,7 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
+import { ChefAttachmentsList } from './chef-attachments-list'
 
 export interface ChefProps {
   firstName: string
@@ -8,8 +9,8 @@ export interface ChefProps {
   userName: string
   email: string
   hashedPassword: string
-  profilePictureUrl?: string | null
-  bio?: string | null
+  attachments: ChefAttachmentsList
+  bio: string | null
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -35,8 +36,8 @@ export class Chef extends Entity<ChefProps> {
     return this.props.hashedPassword
   }
 
-  get profilePictureUrl() {
-    return this.props.profilePictureUrl
+  get attachments() {
+    return this.props.attachments
   }
 
   get bio() {
@@ -56,12 +57,14 @@ export class Chef extends Entity<ChefProps> {
   }
 
   static create(
-    props: Optional<ChefProps, 'profilePictureUrl' | 'bio' | 'createdAt'>,
+    props: Optional<ChefProps, 'attachments' | 'bio' | 'createdAt'>,
     id?: UniqueEntityID,
   ) {
     const chef = new Chef(
       {
         ...props,
+        bio: props.bio ?? null,
+        attachments: props.attachments ?? new ChefAttachmentsList(),
         createdAt: props.createdAt ?? new Date(),
       },
       id,

@@ -1,5 +1,6 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
 export interface IngredientProps {
   name: string
@@ -26,7 +27,7 @@ export class Ingredient extends Entity<IngredientProps> {
   }
 
   static create(
-    props: Omit<IngredientProps, 'createdAt'>,
+    props: Optional<IngredientProps, 'createdAt'>,
     id?: UniqueEntityID,
   ) {
     const ingredient = new Ingredient(

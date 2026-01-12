@@ -8,12 +8,13 @@ export interface RecipeProps {
   slug: Slug
   description: string
   instructions: string
-  prepTimeInMinutes?: number
-  cookTimeInMinutes?: number
-  servings?: number
+  prepTimeInMinutes: number
+  cookTimeInMinutes: number
+  servings: number
   difficultyLevel: 'easy' | 'medium' | 'hard'
   authorId: UniqueEntityID
   tags: UniqueEntityID[]
+  recipeIngredients?: UniqueEntityID[]
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -55,6 +56,10 @@ export class Recipe extends Entity<RecipeProps> {
     return this.props.tags
   }
 
+  get recipeIngredients() {
+    return this.props.recipeIngredients
+  }
+
   get createdAt() {
     return this.props.createdAt
   }
@@ -68,13 +73,27 @@ export class Recipe extends Entity<RecipeProps> {
   }
 
   static create(
-    props: Optional<RecipeProps, 'slug' | 'createdAt'>,
+    props: Optional<
+      RecipeProps,
+      | 'slug'
+      | 'createdAt'
+      | 'tags'
+      | 'recipeIngredients'
+      | 'prepTimeInMinutes'
+      | 'cookTimeInMinutes'
+      | 'servings'
+    >,
     id?: UniqueEntityID,
   ) {
     const recipe = new Recipe(
       {
         ...props,
         slug: props.slug ?? Slug.createFromText(props.title),
+        tags: props.tags ?? [],
+        recipeIngredients: props.recipeIngredients ?? [],
+        prepTimeInMinutes: props.prepTimeInMinutes ?? 0,
+        cookTimeInMinutes: props.cookTimeInMinutes ?? 0,
+        servings: props.servings ?? 1,
         createdAt: props.createdAt ?? new Date(),
       },
       id,
